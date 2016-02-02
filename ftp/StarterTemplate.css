@@ -1,0 +1,26 @@
+body {
+	background-position:top;
+	position:fixed;
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+.oranges{
+	text-align:center;
+	
+}
+p{
+		background-color:white;
+		color:red;
+		text-align:center-left;
+	
+}
+
+	
+h2{
+	
+	color:red;
+	background-color:white;
+}
