@@ -1,0 +1,2073 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+
+   <head>
+    <meta charset="utf-8">
+    <title>Kramer - hi how are you</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link href="//cdn.jsdelivr.net/select2/3.4.2/select2.css" rel="stylesheet"/>
+    <script type="text/javascript">
+          var reco = new webkitSpeechRecognition();
+    
+    reco.onstart = function() { console.log('started recording'); $('#butt')[0].childNodes[0].src='../kramer_tools/static/bootstrap/img/mic_listening_anim.gif'; }
+    reco.onresult = function(event) { console.log('got result');
+                                      text = "";
+                                      for(var i=event.resultIndex; i < event.results.length; i++) { text += event.results[i][0].transcript;}
+                                      console.log('Final text : '+text);
+                                      document.getElementById('query').value = text;
+                                    } 
+    reco.onerror = function(event) {console.log('got error');}
+    reco.onend = function() { console.log('end recording'); $('#butt')[0].childNodes[0].src='../kramer_tools/static/bootstrap/img/mic_thinking_anim2x.gif'; submit_form("prod");  }
+    reco.lang = "en-US";
+    var recording = false; 
+   function copy(){
+     var query = document.getElementById("query").value;
+     var target = "http://www.google.com/?query=" + query;
+     console.log(target);
+   }
+   function start(){
+     text = '';
+     recording = true;
+     reco.start();
+   }
+   function switch_speaker(){
+       if($('#speech')[0].value == '0')
+       {
+           $('#speech')[0].value = '1'
+           $('#speaker')[0].childNodes[0].src="../kramer_tools/static/bootstrap/img/speaker_on.png"
+       }
+       else
+       {
+           $('#speech')[0].value = '0'
+           $('#speaker')[0].childNodes[0].src="../kramer_tools/static/bootstrap/img/speaker_off.png"
+       }
+   }
+    </script>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+input.phrase {
+   width: 80%;
+}
+
+.typeahead {
+   width: 80%;
+
+}
+.modal {
+   position: absolute;
+}
+.modal-body {
+    overflow: visible !important;
+    max-height: none !important;
+}
+
+table th, .table td {
+  vertial-align: middle !important;
+  padding: 2px !important;
+}
+a {
+cursor: pointer !important;
+}
+
+.modal-footer {
+    position: relative !important;
+    z-index: 1 !important;
+}
+     .hide {
+        display: none;
+     }
+    .modal.large{
+        width: 780px;
+        margin-left: -390px; /* - width/2 */
+    }
+    .add_margin_bottom {
+       margin-bottom: 10px;
+    }
+    .small_img {
+         max-width: 100%;
+         max-height: 100%;
+     }
+
+    .caption {
+      height: 60px;
+      overflow: hidden;
+      text-align: center;
+     }
+    .no_border {
+       border-left: 0px !important;
+     }
+
+    .accordion-inner {
+      padding: 0px;
+    }
+    table {
+      margin-bottom: 0px !important;
+    }
+    .ri_color {
+      color: #993333;
+    }
+
+     .full_width {
+      width: 500px !important;
+     }
+     .my_img {
+      width: 15%;
+     }
+     .heading {
+      margin: 0px !important;
+     }
+     .span {
+      line-height: 20px;
+      }
+     .add_margin {
+        margin-bottom: 10px;
+     }
+     .search_bar {
+       margin: 0 auto 38px;
+       position: relative;
+      }
+     .border_on_search_bar {
+      background-color: #F5F5F5;
+      border: 1px solid #D8D8D8;
+      border-radius: 6px 6px 6px 6px;
+     }
+     .border_padding {
+     padding: 8px;
+     }
+     .float_right {
+     float: left !important;
+     margin-top: 20px !important;
+     }
+     .inside_form {
+      margin: 0;
+      padding: 0;
+      position: relative;
+     }
+     .submit_query2 {
+     height: 40px;
+     border-radius: 0 6px 6px 0;
+     top: 0;
+     position: relative;
+     right: 0;
+     }
+     .submit_query {
+     height: 40px;
+     border-radius: 0 6px 6px 0;
+     top: 0;
+     position: absolute;
+     right: 0;
+     }
+     .or_params {
+     margin-top: 10px !important;
+     }
+     .input_box {
+     margin-bottom: 0 !important;
+     height: 30px !important;
+     font-size: 25px !important;
+     width: 89%;
+     }
+     .input_box_big {
+     margin-bottom: 0 !important;
+     height: 50px !important;
+     font-size: 25px !important;
+     width: 93%;
+     }
+ 
+     .img_icon {
+     height: 50px;
+     width: 50px;
+     }
+     .img_div {
+     width: 60%;
+     }
+    </style>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://twitter.github.io/bootstrap/assets//js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+  </head>
+ 
+  <body>
+
+       <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <img style="height:28px; width:40px; float: left; padding: 4px 4px 0px 0px;" src="../kramer_tools/static/bootstrap/img/rovi-logo-transparent.gif">
+          <a class="brand" href="/kdebug/">Kramer</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/kdebug/">Home</a></li>
+ <!--             <li><a href="/kdebug/echostar_cases/">Echostar Cases</a></li>
+              <li><a href="/kdebug/templates/">Templates</a></li>
+              <li><a href="/kdebug/get_sports_from_redis/">Sports from Redis</a></li>
+              <li><a href="/kdebug/kgraphsearch/">Graph Search</a></li>
+              <li><a href="/kdebug/train">Train</a></li>
+              <li><a href="/kdebug/smart_response">Smart Response</a></li>
+              <li><a href="#contact">Contact</a></li>
+              -->
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+
+       <div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span10">
+      <ul class="unstyled border_on_search_bar">
+        <li class="border_padding">
+            <form class="inside_form" id="my_form">
+                  <input class='input_box' autocomplete="on" name='W' id='query'
+                  type="text" placeholder="Enter your query ..."   value="hi how are you"  autofocus="" x-webkit-speech="" onwebkitspeechchange="submit_spoken_form('prod')" >
+              <input type='hidden' name='custid' id='custid' value="">
+            
+              <input type='hidden' name='setup' id='setup' value="prod">
+              
+              <input type='hidden' name='dev_mode' id='dev_mode' value="1">
+              
+            
+              <input type='hidden' name='speech' id='speech' value="0">
+                  <button type="button" class="btn btn-default" onclick="start()" id="butt"><img width=30px src="../kramer_tools/static/bootstrap/img/btn_mic2-thinking@2x.png"></img></button>
+              <button type="submit" id="artist_submit" class="btn btn-large btn-inverse submit_query"><i class="icon-search icon-white"></i></button>
+
+            <div class="float_right">
+          
+                
+                  <button type="button" class="btn btn-default" onclick="switch_speaker()" id="speaker"><img width=30px src="../kramer_tools/static/bootstrap/img/speaker_off.png"></img></button>
+                
+            
+    <input type='text' class='or_params' class='large' value="" name='or_params'  placeholder="Override Params">
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    <input type='text' class='or_params' class='large' value="" name='or_params_debug' placeholder="No Override Params" readonly>
+    &nbsp; &nbsp; &nbsp; &nbsp;
+
+
+<div class="btn-group">
+    
+    
+        
+            <input type='button' class="btn btn-primary" onclick="submit_form('prod')" value='Prod' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('music')" value='Music' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('echostar')" value='Echostar' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('cablevision')" value='Cablevision' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('esstb')" value='Esstb' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('verizon')" value='Verizon' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('verizonspanish')" value='Verizonspanish' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('bskyb')" value='Bskyb' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('condor')" value='Condor' />
+        
+     
+</div> &nbsp; &nbsp; &nbsp; &nbsp;   &nbsp; &nbsp; &nbsp;
+
+<div class="btn-group">
+    
+    
+        
+           <input type='button' class="btn" onclick="submit_form('dev')" value='Dev' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('musicstaging')" value='Musicstaging' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('echostarstaging')" value='Echostarstaging' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('cablevisionstaging')" value='Cablevisionstaging' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('esstbstaging')" value='Esstbstaging' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('verizonstaging')" value='Verizonstaging' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('condorstaging')" value='Condorstaging' />
+        
+     
+</div> &nbsp; &nbsp; &nbsp; &nbsp;   &nbsp; &nbsp; &nbsp;
+
+<div class="btn-group">
+    
+    
+        
+           <input type='button' class="btn" onclick="submit_form('nizam')" value='Nizam' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('china')" value='China' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('sashi')" value='Sashi' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('vinayaka')" value='Vinayaka' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('swarup')" value='Swarup' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('naresh')" value='Naresh' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('rinku')" value='Rinku' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('manik')" value='Manik' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('manik-dev')" value='Manik-dev' />
+        
+     
+        
+           <input type='button' class="btn" onclick="submit_form('nitin')" value='Nitin' />
+        
+     
+</div> &nbsp; &nbsp; &nbsp; &nbsp;   &nbsp; &nbsp; &nbsp;
+
+
+            
+            
+                
+            
+            
+              <input id="vsc" type="checkbox" value="dnNjOmM3NDNhYTJlLTEwNDM5Ng" name="vsc"> Conversation
+            
+ 
+            </div>
+
+            </form>
+        </li>
+      </ul>
+    </div>
+    </div>
+  </div>
+
+
+    <div class="container-fluid">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+
+
+      <!-- Example row of columns -->
+           
+           
+           <h4> Here are some live games.</h4>
+           
+
+
+<div id="answer_string" class="accordion">
+                            <div class="accordion-group">
+                                <div class="accordion-heading">
+                                    <a href="#answer_string_collapse" data-parent="#answer_string" data-toggle="collapse" class="accordion-toggle collapsed">
+                                        Answer String Debug Details (Time Taken: 0.560)
+                                    </a>
+                                </div>
+                                <div class="accordion-body collapse" id="answer_string_collapse" style="height: 0px;">
+                                    <div class="accordion-inner">
+                                        <table class="table table-bordered">
+                                           
+                                            
+                                            <tbody><tr>
+                                               <td>Template Id Triggered</td>
+                                               <td><a target="_blank" href=" http://mycloud.veveoinc.com/resptemplate/open_ty_name/?query=hi+how+are+you&customer_id=vvo&template_id=generic_answer&success=2&target_system=PROD">generic_answer (2)</a>
+                                               </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                               <td>Actual Template Id</td>
+                                               <td><a target="_blank" href=" http://mycloud.veveoinc.com/resptemplate/open_ty_name/?query=hi+how+are+you&customer_id=vvo&template_id=%28%27f-games__f-live_game%27%2C+%27f-games__f-live_game%27%29&success=2&target_system=PROD">('f-games__f-live_game', 'f-games__f-live_game') (2)</a>
+                                               </td>
+                                            </tr>
+
+                                               
+                                            
+                                            <tr>
+                                               <td>Customize the response for multiple result</td>
+                                               <td><a target="_blank" href=" http://mycloud.veveoinc.com/resptemplate/open_ty_name/?query=hi+how+are+you&customer_id=vvo&template_id=%28%27f-games__f-live_game%27%2C+%27f-games__f-live_game%27%29&success=2&target_system=PROD">('f-games__f-live_game', 'f-games__f-live_game') (2)</a>
+                                               </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                               <td>Customize the response for single result</td>
+                                               <td><a target="_blank" href=" http://mycloud.veveoinc.com/resptemplate/open_ty_name/?query=hi+how+are+you&customer_id=vvo&template_id=%28%27f-games__f-live_game%27%2C+%27f-games__f-live_game%27%29&success=1&target_system=PROD">('f-games__f-live_game', 'f-games__f-live_game') (1)</a>
+                                               </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                               <td>Customize the response for zero result</td>
+                                               <td><a target="_blank" href=" http://mycloud.veveoinc.com/resptemplate/open_ty_name/?query=hi+how+are+you&customer_id=vvo&template_id=%28%27f-games__f-live_game%27%2C+%27f-games__f-live_game%27%29&success=0&target_system=PROD">('f-games__f-live_game', 'f-games__f-live_game') (0)</a>
+                                               </td>
+                                            </tr>
+
+                                            <tr>
+                                               <td>Success</td>
+                                               <td>2</td>
+                                            </tr>
+
+
+                                            <tr>
+                                               <td>TTS Response Template</td>
+                                               <td>Here are some [%(more_word_str)s] [%(filter_sort_str)s] [%(award_val_str)s winning] [%(rating_val_str)s] [%(album_val_str)s] [%(role_val_str)s] [%(language_val_str)s] [%(genre_val_str)s] %(filter_str)s [of %(of_val_str)s] [%(with_val_str)s] [from %(year_val_str)s] [for %(for_val_str)s] [on %(on_val_str)s] [%(temporal_str)s] [from the %(decade_val_str)s] [without %(n-of_val_str)s] [and that is not %(n-role_val_str)s]</td>
+                                            </tr>
+
+                                            <tr>
+                                               <td>Conditon Str</td>
+                                               <td>[&#39;asset_running_now_on_tv&#39;, u&#39;game_scheduled&#39;]</td>
+                                            </tr>
+
+                                            <tr>
+                                               <td>Values In Scope</td>
+                                               <td>
+                                               <table>
+                                                   <tr><th>Key</th><th>Value</th></tr>
+                                                   
+                                                   <tr><td>no_of_result_minus1</td><td>9</td></tr>
+                                                   
+                                                   <tr><td>filter_str</td><td>live games</td></tr>
+                                                   
+                                                   <tr><td>first_few_results</td><td>Grizzlies at Raptors in NBA Regular Season, Warriors at Hawks in NBA Basketball and Flames at Ducks in NHL Regular Season</td></tr>
+                                                   
+                                                   <tr><td>season_str</td><td>several episodes</td></tr>
+                                                   
+                                                   <tr><td>first_result</td><td>Grizzlies at Raptors in NBA Regular Season</td></tr>
+                                                   
+                                                   <tr><td>running_now_on_channel_str</td><td>NBA League Pass</td></tr>
+                                                   
+                                                   <tr><td>no_of_result_minus1_str</td><td>and 9 more games</td></tr>
+                                                   
+                                                   <tr><td>result_2_T</td><td>NHL Regular Season</td></tr>
+                                                   
+                                                   <tr><td>result_2_EPT</td><td>Flames at Ducks</td></tr>
+                                                   
+                                                   <tr><td>result_0_T</td><td>NBA Regular Season</td></tr>
+                                                   
+                                                   <tr><td>result_1_EPT</td><td>Warriors at Hawks</td></tr>
+                                                   
+                                                   <tr><td>result_1_T</td><td>NBA Basketball</td></tr>
+                                                   
+                                                   <tr><td>upcoming_game_str</td><td>Here are some other titles of</td></tr>
+                                                   
+                                                   <tr><td>plural_s</td><td>s</td></tr>
+                                                   
+                                                   <tr><td>release_date</td><td>February 21, 2016</td></tr>
+                                                   
+                                                   <tr><td>minus1_plural_s</td><td>s</td></tr>
+                                                   
+                                                   <tr><td>all_avail_str</td><td>on running now on TV</td></tr>
+                                                   
+                                                   <tr><td>second_game_str</td><td>tomorrow night at 08:00 PM EST</td></tr>
+                                                   
+                                                   <tr><td>result_0_EPT</td><td>Grizzlies at Raptors</td></tr>
+                                                   
+                                                   <tr><td>tv_str</td><td>NBA League Pass</td></tr>
+                                                   
+                                                   <tr><td>first_result_participant_title_0</td><td>Memphis Grizzlies</td></tr>
+                                                   
+                                                   <tr><td>first_result_participant_title_1</td><td>Toronto Raptors</td></tr>
+                                                   
+                                                   <tr><td>no_of_result</td><td>several</td></tr>
+                                                   
+                                                   <tr><td>second_few_results</td><td>Warriors at Hawks in NBA Basketball and Flames at Ducks in NHL Regular Season</td></tr>
+                                                   
+                                               </table>
+                                               </td>
+                                            </tr>
+                                            
+                                            
+                                         </tbody></table>
+                                     </div>
+                                 </div>
+                            </div>
+                        </div>
+
+
+           <br/>
+
+    
+    
+    
+    
+    
+    
+    
+        
+    
+
+
+<div id="multi_entities" class="accordion">
+                            <div class="accordion-group">
+                                <div class="accordion-heading">
+                                    <a href="#multi_entities_collapse" data-parent="#multi_entities" data-toggle="collapse" class="accordion-toggle collapsed">
+                                        Multi Entities Interpretation (1): hi how are you
+                                    </a>
+                                </div>
+                                <div class="accordion-body collapse" id="multi_entities_collapse" style="height: 0px;">
+                                    <div class="accordion-inner">
+                                    
+                                     <table class="table table-bordered">
+                                         <tbody>
+                                             <tr>
+                                                 <td> Graph Connections </td>
+                                                 <td> <a href=http://rovi-conv-er-2.internal.veveo.net:8100/?phrases=set%28%5B%28%27you%27%2C+11%2C+3%2C+4%29%2C+%28%27how%27%2C+3%2C+3%2C+2%29%2C+%28%27are+you%27%2C+7%2C+7%2C+1%29%2C+%28%27hi%27%2C+0%2C+2%2C+3%29%5D%29&amp;req=check_overlap_phrase_connections target="_blank"> Click Here </a></td>
+                                             </tr>
+                                             <tr>
+                                                 <td> Pos Tagger </td>
+                                                 <td> <a href=http://rovi-conv-er-2.internal.veveo.net:8100/?phrases=set%28%5B%28%27you%27%2C+11%2C+3%2C+4%29%2C+%28%27how%27%2C+3%2C+3%2C+2%29%2C+%28%27are+you%27%2C+7%2C+7%2C+1%29%2C+%28%27hi%27%2C+0%2C+2%2C+3%29%5D%29&amp;req=check_overlap_phrase_connections target="_blank"> Click Here </a></td>
+                                             </tr>
+                                             
+                                            <tr>
+                                                <td> Process </td>
+                                                <td> Time </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        multi_lang_nlp
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;     96.76&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.064667&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        Total
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;     92.61&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.006944&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        pos_tagger
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;      2.94&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.001963&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        shortlister
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;      0.33&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.000223&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        longest_common_subsequence
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;     21.54&#39;), (u&#39;frequency&#39;, 14), (u&#39;timetaken&#39;, u&#39;0:00:00.002738&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        Template Matching
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;     19.27&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.012880&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        Generate possibilities
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;      3.27&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.000245&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        interp_pruning
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;      0.02&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.000011&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        finding_closest_template
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;     67.69&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.008604&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        Sort Interpretations Final
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;      0.06&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.000040&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        Sort and format data
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;     11.28&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.000846&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        template_matcher
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;      0.02&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.000011&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        candidate_templates
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;     29.13&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.003703&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        word2vec_timing
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;      3.94&#39;), (u&#39;frequency&#39;, 14), (u&#39;timetaken&#39;, u&#39;0:00:00.000501&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        Ranking/Scoring
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;     10.72&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.000804&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        PLG Queries
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;      0.12&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.000009&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                            <tr>
+                                                <td>
+                                                        Interpretation Creation
+                                                </td>
+                                                <td>
+                                                        OrderedDict([(u&#39;percentage&#39;, u&#39;     65.12&#39;), (u&#39;frequency&#39;, 1), (u&#39;timetaken&#39;, u&#39;0:00:00.004883&#39;)])
+                                                </td>
+                                            </tr>
+                                                
+                                         </tbody></table>
+                                         
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    
+                                                    
+                                                    
+                                                    <td> Interpretation </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Score </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Template Score </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Popularity Score </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Maintain Context </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Total Score </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Connections </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Intent </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Good Phrases </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Matched Template </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Template Queries </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Template Popularity </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Phrase Map </td>
+                                                    
+                                                    
+                                                </tr>
+                                                
+                                                <tr>
+                                                
+                                                    
+                                                <td>
+                                                        hi how are you
+                                                    </td>
+                                                    
+                                            
+                                                    
+                                                <td>
+                                                        0
+                                                    </td>
+                                                    
+                                            
+                                                    
+                                                <td>
+                                                        2.86
+                                                    </td>
+                                                    
+                                            
+                                                    
+                                                <td>
+                                                        0
+                                                    </td>
+                                                    
+                                            
+                                                    
+                                                <td>
+                                                        0.0
+                                                    </td>
+                                                    
+                                            
+                                                    
+                                                <td>
+                                                        2.86
+                                                    </td>
+                                                    
+                                            
+                                                    
+                                                <td>
+                                                        0
+                                                    </td>
+                                                    
+                                            
+                                                    
+                                                <td>
+                                                        live_game
+                                                    </td>
+                                                    
+                                            
+                                                    
+                                                <td>
+                                                        []
+                                                    </td>
+                                                    
+                                            
+                                                    
+                                                <td>
+                                                        how are the a doing
+                                                    </td>
+                                                    
+                                            
+                                                    
+                                                <td>
+                                                        [u&#34;how are the A&#39;s doing&#34;]
+                                                    </td>
+                                                    
+                                            
+                                                    
+                                                <td>
+                                                        1
+                                                    </td>
+                                                    
+                                            
+                                                    
+                                                <td>
+                                                        
+                                                    </td>
+                                                    
+                                            
+                                        </tr>
+                                        
+                                         </tbody></table>
+                                     </div>
+                                 </div>
+                            </div>
+                        </div>
+
+           <br/>
+<div id="shortlisted__entities" class="accordion">
+                            <div class="accordion-group">
+                                <div class="accordion-heading">
+                                    <a href="#shortlisted_entities_collapse" data-parent="#shortlisted_entities" data-toggle="collapse" class="accordion-toggle collapsed">
+                                        Shortlisted entities
+                                    </a>
+                                </div>
+                                <div class="accordion-body collapse" id="shortlisted_entities_collapse" style="height: 0px;">
+                                    <div class="accordion-inner">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    
+                                                    
+                                                    <td> Phrase </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Title </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Gid </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Score </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Bias </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Tagzone </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Source Flag </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Field </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Gid Pop </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Pkwt </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Connections </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Context Connections </td>
+                                                    
+                                                    
+                                                    
+                                                    <td> Temporal Info </td>
+                                                    
+                                                    
+                                                </tr>
+                                                
+                                         </tbody></table>
+                                     </div>
+                                 </div>
+                            </div> 
+                        </div>
+
+
+<div class="row-fluid">
+<div class="span7">
+
+
+   
+   <B>Answers</B>
+   
+      
+   
+
+
+   
+
+
+
+   
+      <div class="row-fluid" style="{height: 50px}">
+         <div class="span12">
+            <div class="row-fluid">
+             <div class="span1">
+                 <img src="http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png" class="img-rounded" onError="this.onerror=null;this.src='http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';">
+                 <h6>
+                 
+                    <font color="green">Game</font>
+                 
+                 </h6>
+             </div>
+          <div class="span11">
+          <h4 class="heading">NBA Regular Season
+          
+            :Grizzlies at Raptors
+          
+          
+              (2016-2-21)
+          
+          </h4>
+          <span></span>
+          
+          <br/>
+          
+          
+          
+          <table class="table table-hover table-bordered">
+              
+                  
+              
+              
+                  
+              
+                  
+              
+         </table>
+          <!-- BEGIN OF STANDINGS -->
+          <table class="table table-hover table-bordered">
+          
+              
+          
+              
+          
+          </table>
+          <!-- END OF STANDINGS -->
+          
+          <!--- BEGIN OF AWARD -->
+          
+          <!--- END OF AWARD -->
+
+          <h5>VGEV230369 | Relevance = 1297011 | <span class='ri_color'> NBA Regular Season </span> </h5>
+
+          
+             
+             
+                 
+                 <span><font color='BLUE'>TEAM7-SE (2016-02-21 23:00)</font></span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span><font color='BLUE'>TEAM7-DVR</font></span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>-MORE-INFO</span>
+                 
+             
+             
+          
+          
+             <br/>
+          
+             <br/>
+          </div>
+        </div>
+        </div>
+      </div>
+      <hr>
+    
+      <div class="row-fluid" style="{height: 50px}">
+         <div class="span12">
+            <div class="row-fluid">
+             <div class="span1">
+                 <img src="http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png" class="img-rounded" onError="this.onerror=null;this.src='http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';">
+                 <h6>
+                 
+                    <font color="green">Game</font>
+                 
+                 </h6>
+             </div>
+          <div class="span11">
+          <h4 class="heading">NBA Basketball
+          
+            :Warriors at Hawks
+          
+          
+          </h4>
+          <span>Golden State at Atlanta.</span>
+          
+          <br/>
+          
+          
+          
+          <!--- BEGIN OF AWARD -->
+          
+          <!--- END OF AWARD -->
+
+          <h5>VGRV1013257 | Relevance = 1297010 | <span class='ri_color'> National Basketball Association </span> </h5>
+
+          
+             
+             
+                 
+                 <span>NBA HD-SE (2016-02-23 01:00)</span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>NBA HD-DVR</span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>-MORE-INFO</span>
+                 
+             
+             
+          
+          
+             <br/>
+          
+             <br/>
+          </div>
+        </div>
+        </div>
+      </div>
+      <hr>
+    
+      <div class="row-fluid" style="{height: 50px}">
+         <div class="span12">
+            <div class="row-fluid">
+             <div class="span1">
+                 <img src="http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png" class="img-rounded" onError="this.onerror=null;this.src='http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';">
+                 <h6>
+                 
+                    <font color="green">Game</font>
+                 
+                 </h6>
+             </div>
+          <div class="span11">
+          <h4 class="heading">NHL Regular Season
+          
+            :Flames at Ducks
+          
+          
+              (2016-2-21)
+          
+          </h4>
+          <span></span>
+          
+              <span> </span>
+          
+          <br/>
+          
+          
+          
+          <table class="table table-hover table-bordered">
+              
+                  
+              
+              
+                  
+              
+                  
+              
+         </table>
+          <!-- BEGIN OF STANDINGS -->
+          <table class="table table-hover table-bordered">
+          
+              
+          
+              
+          
+          </table>
+          <!-- END OF STANDINGS -->
+          
+          <!--- BEGIN OF AWARD -->
+          
+          <!--- END OF AWARD -->
+
+          <h5>VGEV215504 | Relevance = 1296909 | <span class='ri_color'> NHL Regular Season </span> </h5>
+
+          
+             
+             
+                 
+                 <span><font color='BLUE'>TSN-SE (2016-02-22 00:00)</font></span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span><font color='BLUE'>TBA-DVR</font></span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>-MORE-INFO</span>
+                 
+             
+             
+          
+          
+             <br/>
+          
+             <br/>
+          </div>
+        </div>
+        </div>
+      </div>
+      <hr>
+    
+      <div class="row-fluid" style="{height: 50px}">
+         <div class="span12">
+            <div class="row-fluid">
+             <div class="span1">
+                 <img src="http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png" class="img-rounded" onError="this.onerror=null;this.src='http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';">
+                 <h6>
+                 
+                    <font color="green">Game</font>
+                 
+                 </h6>
+             </div>
+          <div class="span11">
+          <h4 class="heading">NCAA Men&#39;s Division I Basketball
+          
+            :Utah at USC
+          
+          
+              (2016-2-21)
+          
+          </h4>
+          <span>Utah at Southern California in Pac-12 play. Larry Krystowiak&#39;s Utes shot 56.9 percent in ...</span>
+          
+          <br/>
+          
+          
+          
+          <table class="table table-hover table-bordered">
+              
+                  
+              
+              
+                  
+              
+                  
+              
+         </table>
+          <!-- BEGIN OF STANDINGS -->
+          <table class="table table-hover table-bordered">
+          
+              
+          
+              
+          
+          </table>
+          <!-- END OF STANDINGS -->
+          
+          <!--- BEGIN OF AWARD -->
+          
+          <!--- END OF AWARD -->
+
+          <h5>VGEV246170 | Relevance = 1296908 | <span class='ri_color'> NCAA Men&#39;s Division I Basketball </span> </h5>
+
+          
+             
+             
+                 
+                 <span><font color='BLUE'>PAC12-SE (2016-02-21 23:00)</font></span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span><font color='BLUE'>TBA-DVR</font></span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>-MORE-INFO</span>
+                 
+             
+             
+          
+          
+             <br/>
+          
+             <br/>
+          </div>
+        </div>
+        </div>
+      </div>
+      <hr>
+    
+      <div class="row-fluid" style="{height: 50px}">
+         <div class="span12">
+            <div class="row-fluid">
+             <div class="span1">
+                 <img src="http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png" class="img-rounded" onError="this.onerror=null;this.src='http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';">
+                 <h6>
+                 
+                    <font color="green">Game</font>
+                 
+                 </h6>
+             </div>
+          <div class="span11">
+          <h4 class="heading">NCAA Women&#39;s Division I Basketball
+          
+            :UCLA at Oregon St.
+          
+          
+              (2016-2-21)
+          
+          </h4>
+          <span>UCLA at Oregon State.</span>
+          
+          <br/>
+          
+          
+          
+          <table class="table table-hover table-bordered">
+              
+                  
+              
+              
+                  
+              
+                  
+              
+         </table>
+          <!-- BEGIN OF STANDINGS -->
+          <table class="table table-hover table-bordered">
+          
+              
+          
+              
+          
+          </table>
+          <!-- END OF STANDINGS -->
+          
+          <!--- BEGIN OF AWARD -->
+          
+          <!--- END OF AWARD -->
+
+          <h5>VGEV260262 | Relevance = 1296907 | <span class='ri_color'> NCAA Women&#39;s Division I Basketball </span> </h5>
+
+          
+             
+             
+                 
+                 <span>PAC12-SE (2016-02-22 02:00)</span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>PAC12-DVR</span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>-MORE-INFO</span>
+                 
+             
+             
+          
+          
+             <br/>
+          
+             <br/>
+          </div>
+        </div>
+        </div>
+      </div>
+      <hr>
+    
+      <div class="row-fluid" style="{height: 50px}">
+         <div class="span12">
+            <div class="row-fluid">
+             <div class="span1">
+                 <img src="http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png" class="img-rounded" onError="this.onerror=null;this.src='http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';">
+                 <h6>
+                 
+                    <font color="green">Game</font>
+                 
+                 </h6>
+             </div>
+          <div class="span11">
+          <h4 class="heading">Ultimate Fighting Championship
+          
+          
+              (2016-2-21)
+          
+          </h4>
+          <span></span>
+          
+          <br/>
+          
+          
+          
+          <table class="table table-hover table-bordered">
+              
+                  
+              
+              
+                  
+              
+                  
+              
+         </table>
+          <!-- BEGIN OF STANDINGS -->
+          <table class="table table-hover table-bordered">
+          
+              
+          
+              
+          
+          </table>
+          <!-- END OF STANDINGS -->
+          
+          <!--- BEGIN OF AWARD -->
+          
+          <!--- END OF AWARD -->
+
+          <h5>VGEV267835 | Relevance = 1296706 | <span class='ri_color'> Ultimate Fighting Championship </span> </h5>
+
+          
+             
+             
+                 
+                 <span><font color='BLUE'>TBA-SE (2016-02-22 00:00)</font></span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span><font color='BLUE'>TBA-DVR</font></span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>-MORE-INFO</span>
+                 
+             
+             
+          
+          
+             <br/>
+          
+             <br/>
+          </div>
+        </div>
+        </div>
+      </div>
+      <hr>
+    
+      <div class="row-fluid" style="{height: 50px}">
+         <div class="span12">
+            <div class="row-fluid">
+             <div class="span1">
+                 <img src="http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png" class="img-rounded" onError="this.onerror=null;this.src='http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';">
+                 <h6>
+                 
+                    <font color="green">Game</font>
+                 
+                 </h6>
+             </div>
+          <div class="span11">
+          <h4 class="heading">FA Cup Soccer
+          
+            :Shrewsbury vs. Manchester United
+          
+          
+          </h4>
+          <span>Shrewsbury vs. Manchester United.</span>
+          
+          <br/>
+          
+          
+          
+          <!--- BEGIN OF AWARD -->
+          
+          <!--- END OF AWARD -->
+
+          <h5>VGRV3319084358 | Relevance = 1296576 | <span class='ri_color'> FA Cup </span> </h5>
+
+          
+             
+             
+                 
+                 <span>FS1HD-SE (2016-02-22 19:30)</span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>FS1HD-DVR</span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>-MORE-INFO</span>
+                 
+             
+             
+          
+          
+             <br/>
+          
+             <br/>
+          </div>
+        </div>
+        </div>
+      </div>
+      <hr>
+    
+      <div class="row-fluid" style="{height: 50px}">
+         <div class="span12">
+            <div class="row-fluid">
+             <div class="span1">
+                 <img src="http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png" class="img-rounded" onError="this.onerror=null;this.src='http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';">
+                 <h6>
+                 
+                    <font color="green">Game</font>
+                 
+                 </h6>
+             </div>
+          <div class="span11">
+          <h4 class="heading">Serie A
+          
+            :Napoli vs Milan
+          
+          
+              (2016-2-22)
+          
+          </h4>
+          <span></span>
+          
+          <br/>
+          
+          
+          
+          <table class="table table-hover table-bordered">
+              
+                  
+              
+              
+                  
+              
+                  
+              
+         </table>
+          <!-- BEGIN OF STANDINGS -->
+          <table class="table table-hover table-bordered">
+          
+              
+          
+              
+          
+          </table>
+          <!-- END OF STANDINGS -->
+          
+          <!--- BEGIN OF AWARD -->
+          
+          <!--- END OF AWARD -->
+
+          <h5>VGEV239577 | Relevance = 1296553 | <span class='ri_color'> Serie A </span> </h5>
+
+          
+             
+             
+                 
+                 <span>TBA-SE (2016-02-22 20:00)</span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>TBA-DVR</span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>-MORE-INFO</span>
+                 
+             
+             
+          
+          
+             <br/>
+          
+             <br/>
+          </div>
+        </div>
+        </div>
+      </div>
+      <hr>
+    
+      <div class="row-fluid" style="{height: 50px}">
+         <div class="span12">
+            <div class="row-fluid">
+             <div class="span1">
+                 <img src="http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png" class="img-rounded" onError="this.onerror=null;this.src='http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amamp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';">
+                 <h6>
+                 
+                    <font color="green">Game</font>
+                 
+                 </h6>
+             </div>
+          <div class="span11">
+          <h4 class="heading">Football League One
+          
+            :Burton Albion vs Southend United
+          
+          
+              (2016-2-22)
+          
+          </h4>
+          <span></span>
+          
+          <br/>
+          
+          
+          
+          <table class="table table-hover table-bordered">
+              
+                  
+              
+              
+                  
+              
+                  
+              
+         </table>
+          <!-- BEGIN OF STANDINGS -->
+          <table class="table table-hover table-bordered">
+          
+              
+          
+              
+          
+          </table>
+          <!-- END OF STANDINGS -->
+          
+          <!--- BEGIN OF AWARD -->
+          
+          <!--- END OF AWARD -->
+
+          <h5>VGEV212431 | Relevance = 1296532 | <span class='ri_color'> Football League One </span> </h5>
+
+          
+             
+             
+                 
+                 <span>TBA-SE (2016-02-22 19:45)</span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>TBA-DVR</span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>-MORE-INFO</span>
+                 
+             
+             
+          
+          
+             <br/>
+          
+             <br/>
+          </div>
+        </div>
+        </div>
+      </div>
+      <hr>
+    
+      <div class="row-fluid" style="{height: 50px}">
+         <div class="span12">
+            <div class="row-fluid">
+             <div class="span1">
+                 <img src="http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png" class="img-rounded" onError="this.onerror=null;this.src='http://imc.veveo.net/imc?t=kdebug&amp;w=70&amp;g=UNKOWN_GID&amp;u=https%3A//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';">
+                 <h6>
+                 
+                    <font color="green">Game</font>
+                 
+                 </h6>
+             </div>
+          <div class="span11">
+          <h4 class="heading">Primeira Liga
+          
+            :Sporting vs Boavista
+          
+          
+              (2016-2-22)
+          
+          </h4>
+          <span></span>
+          
+          <br/>
+          
+          
+          
+          <table class="table table-hover table-bordered">
+              
+                  
+              
+              
+                  
+              
+                  
+              
+         </table>
+          <!-- BEGIN OF STANDINGS -->
+          <table class="table table-hover table-bordered">
+          
+              
+          
+              
+          
+          </table>
+          <!-- END OF STANDINGS -->
+          
+          <!--- BEGIN OF AWARD -->
+          
+          <!--- END OF AWARD -->
+
+          <h5>VGEV225304 | Relevance = 1296516 | <span class='ri_color'> Primeira Liga </span> </h5>
+
+          
+             
+             
+                 
+                 <span>TBA-SE (2016-02-22 20:00)</span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>TBA-DVR</span>
+                 
+             
+             
+          
+             
+             
+                 
+                 <span>-MORE-INFO</span>
+                 
+             
+             
+          
+          
+             <br/>
+          
+             <br/>
+          </div>
+        </div>
+        </div>
+      </div>
+      <hr>
+    
+
+</div>
+
+	<div id="smart-search-modal" class="modal hide">
+		<div class="modal-header" style="overflow:hidden;">
+			<h3 class="pull-left">Search</h3>
+			<a class="close" data-dismiss="modal">X</a>
+		</div>
+		<div class="modal-body">
+            <div style="margin-bottom: 25px; width: 100%; display: table">
+                <label>
+                    <b>search url:</b>
+                    <select name="search-url" style="margin: 0px; width: 100%; height: 25px">
+                        <option value="/smarttag_search/">/smarttag_search/</option>
+                    </select>
+                </label>
+            </div>
+            <div style="margin-bottom:10px;position:relative;padding-right:80px;">
+                <input type="text" class="search-query border-box" style="width:100%;height:30px;" />
+                <button class="btn search-btn" style="position:absolute;top:0;right:0;">Search</button>
+            </div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary save-search">Save</button>
+		</div>
+	</div>
+
+<div class="span5">
+
+    <h4>Input Interpretations <br><a target="_blank" href="/kramer_tools?backend_url=http%3A%2F%2F10.8.19.141%3A8000%2Fphrase_server%3Fis_debug%3D1%26tz2%3DAmerica%252FNew_York%26uuid%3Dc743aa2e%26custid%3D%26app%3DTVTAP%26ks%3D0%26profiling%3D1%26W%3Dhi%2Bhow%2Bare%2Byou%26text_blurb%3Dhi%2Bhow%2Bare%2Byou%26XPID%3Dpkg00%2540341765463.ROVI%26orig_out_format%3Djson%26Rty%3D5&amp;dev_mode=1">Detailed URL</a>
+        
+        <!--&nbsp; &nbsp;&nbsp;&nbsp;  -->
+        |
+        <a href="#myModal" 
+        data-toggle='modal'
+        onclick='report_issue("hi how are you", "prod")' >Report Issue</a>
+         
+        <div id="myModal" class="modal hide fade large" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div id="modal_data">
+                 Loading Report Information...
+            </div>
+        </div>
+        |
+        <!--&nbsp; &nbsp;&nbsp;&nbsp;  -->
+        <!--
+        
+        <button type="button" onclick="toggle_like();" id="like" class="btn btn-success">UpVote Entities</button>
+        
+        -->
+        <a href="http://ksq.veveoinc.com/tcr/?query=hi+how+are+you&amp;setup=PROD" target="_blank">Teach me Boss</a>
+    </h4>
+
+
+
+
+
+<h4>Intent: live_game#na ; Action: </h4>
+
+<!-- for each sctn in phraserver response -->
+    <table class="table table-hover table-bordered">
+            
+            
+            
+            </tbody>
+        </table>
+      
+</div>
+</div>
+
+   <div id="debug_tab">
+      <h4> Debug Information </h4>
+      <table class="table table-condensed">
+        <tr> <td> <b> KProxy URL </b> </td> <td> <a target="_blank" href="http://internal-kramer-demo-kproxy-1-1899346527.us-east-1.elb.amazonaws.com/vtvspeech?is_debug=1&amp;Rty=5&amp;XPID=&amp;custid=&amp;W=hi+how+are+you">http://internal-kramer-demo-kproxy-1-1899346527.us-east-1.elb.amazonaws.com/vtvspeech?is_debug=1&amp;Rty=5&amp;XPID=&amp;custid=&amp;W=hi+how+are+you</a> </td> </tr> 
+        
+            
+        
+        
+        
+         <tr> <td> <b><a href="http://rovi-bound-usa-ssc-1.internal.veveo.net:8050/search?RPR=10&amp;ver=3.0&amp;W=&amp;VQ=1&amp;FL=SynFilterGames%5ESynPastGames&amp;app=TVTAP&amp;langfilt=ENG&amp;dbg=1&amp;ProfileMix=NETFLIX%3A0.33%2CFACEBOOK%3A0.33%2CTVTAP%3A0.33&amp;XPID=pkg00%40341765463.ROVI&amp;_vq_ssid=None&amp;XUA=tvspch&amp;NFL=&amp;importnf=0&amp;sc=&amp;ECT=5&amp;RFTR=0&amp;PN=524288&amp;DS=255" target="_blank">tv--tv--1</a></b> </td> <td> <a target="_blank" href="http://10.4.18.103:5000/search_ui?baseurl=rovi-bound-usa-ssc-1.internal.veveo.net:8050&amp;RPR=10&amp;ver=3.0&amp;W=&amp;VQ=1&amp;FL=SynFilterGames%5ESynPastGames&amp;app=TVTAP&amp;langfilt=ENG&amp;dbg=1&amp;ProfileMix=NETFLIX%3A0.33%2CFACEBOOK%3A0.33%2CTVTAP%3A0.33&amp;XPID=pkg00%40341765463.ROVI&amp;_vq_ssid=None&amp;XUA=tvspch&amp;NFL=&amp;importnf=0&amp;sc=&amp;ECT=5&amp;RFTR=0&amp;PN=524288&amp;DS=255">http://rovi-bound-usa-ssc-1.internal.veveo.net:8050/search?RPR=10&amp;ver=3.0&amp;W=&amp;VQ=1&amp;FL=SynFilterGames%5ESynPastGames&amp;app=TVTAP&amp;langfilt=ENG&amp;dbg=1&amp;ProfileMix=NETFLIX%3A0.33%2CFACEBOOK%3A0.33%2CTVTAP%3A0.33&amp;XPID=pkg00%40341765463.ROVI&amp;_vq_ssid=None&amp;XUA=tvspch&amp;NFL=&amp;importnf=0&amp;sc=&amp;ECT=5&amp;RFTR=0&amp;PN=524288&amp;DS=255</a> </td> </tr>
+        
+        
+        
+         <tr> <td> <b><a href="http://rovi-bound-usa-ssc-1.internal.veveo.net:8050/search?RPR=10&amp;ver=3.0&amp;W=&amp;VQ=1&amp;FL=SynFilterGames%5ESynFilterLive&amp;app=TVTAP&amp;langfilt=ENG&amp;dbg=1&amp;ProfileMix=NETFLIX%3A0.33%2CFACEBOOK%3A0.33%2CTVTAP%3A0.33&amp;XPID=pkg00%40341765463.ROVI&amp;_vq_ssid=c2Vzc2lvbjpjNzQzYWEyZS0xMDQzOTY&amp;XUA=tvspch&amp;NFL=&amp;importnf=0&amp;sc=&amp;ECT=5&amp;RFTR=0&amp;PN=12&amp;DS=255" target="_blank">tv--tv--0</a></b> </td> <td> <a target="_blank" href="http://10.4.18.103:5000/search_ui?baseurl=rovi-bound-usa-ssc-1.internal.veveo.net:8050&amp;RPR=10&amp;ver=3.0&amp;W=&amp;VQ=1&amp;FL=SynFilterGames%5ESynFilterLive&amp;app=TVTAP&amp;langfilt=ENG&amp;dbg=1&amp;ProfileMix=NETFLIX%3A0.33%2CFACEBOOK%3A0.33%2CTVTAP%3A0.33&amp;XPID=pkg00%40341765463.ROVI&amp;_vq_ssid=c2Vzc2lvbjpjNzQzYWEyZS0xMDQzOTY&amp;XUA=tvspch&amp;NFL=&amp;importnf=0&amp;sc=&amp;ECT=5&amp;RFTR=0&amp;PN=12&amp;DS=255">http://rovi-bound-usa-ssc-1.internal.veveo.net:8050/search?RPR=10&amp;ver=3.0&amp;W=&amp;VQ=1&amp;FL=SynFilterGames%5ESynFilterLive&amp;app=TVTAP&amp;langfilt=ENG&amp;dbg=1&amp;ProfileMix=NETFLIX%3A0.33%2CFACEBOOK%3A0.33%2CTVTAP%3A0.33&amp;XPID=pkg00%40341765463.ROVI&amp;_vq_ssid=c2Vzc2lvbjpjNzQzYWEyZS0xMDQzOTY&amp;XUA=tvspch&amp;NFL=&amp;importnf=0&amp;sc=&amp;ECT=5&amp;RFTR=0&amp;PN=12&amp;DS=255</a> </td> </tr>
+        
+        
+        
+         <tr> <td> <b>kproxy</b> </td> <td> <a target="_blank" href="http://10.8.19.141/vtvspeech?is_debug=1&amp;Rty=5&amp;XPID=&amp;custid=&amp;W=hi+how+are+you">http://10.8.19.141/vtvspeech?is_debug=1&amp;Rty=5&amp;XPID=&amp;custid=&amp;W=hi+how+are+you</a> </td> </tr>
+        
+        
+        
+         <tr> <td> <b>phrase_server</b> </td> <td> <a target="_blank" href="http://10.8.19.141:8000/phrase_server?is_debug=1&amp;tz2=America%2FNew_York&amp;uuid=c743aa2e&amp;custid=&amp;app=TVTAP&amp;ks=0&amp;profiling=1&amp;W=hi+how+are+you&amp;text_blurb=hi+how+are+you&amp;XPID=pkg00%40341765463.ROVI&amp;orig_out_format=json&amp;Rty=5">http://10.8.19.141:8000/phrase_server?is_debug=1&amp;tz2=America%2FNew_York&amp;uuid=c743aa2e&amp;custid=&amp;app=TVTAP&amp;ks=0&amp;profiling=1&amp;W=hi+how+are+you&amp;text_blurb=hi+how+are+you&amp;XPID=pkg00%40341765463.ROVI&amp;orig_out_format=json&amp;Rty=5</a> </td> </tr>
+        
+        
+        
+         <tr> <td> <b><a href="http://rovi-bound-usa-ssc-1.internal.veveo.net:8050/search?RPR=10&amp;ver=3.0&amp;VQ=1&amp;app=TVTAP&amp;langfilt=ENG&amp;dbg=1&amp;ProfileMix=NETFLIX%3A0.33%2CFACEBOOK%3A0.33%2CTVTAP%3A0.33&amp;XPID=pkg00%40341765463.ROVI&amp;_vq_ssid=c2Vzc2lvbjpjNzQzYWEyZS0xMDQzOTY&amp;XUA=tvspch&amp;importnf=0&amp;ECT=5&amp;RFTR=0&amp;PN=12&amp;DS=255" target="_blank">tv--tv--2</a></b> </td> <td> <a target="_blank" href="http://10.4.18.103:5000/search_ui?baseurl=rovi-bound-usa-ssc-1.internal.veveo.net:8050&amp;RPR=10&amp;ver=3.0&amp;VQ=1&amp;app=TVTAP&amp;langfilt=ENG&amp;dbg=1&amp;ProfileMix=NETFLIX%3A0.33%2CFACEBOOK%3A0.33%2CTVTAP%3A0.33&amp;XPID=pkg00%40341765463.ROVI&amp;_vq_ssid=c2Vzc2lvbjpjNzQzYWEyZS0xMDQzOTY&amp;XUA=tvspch&amp;importnf=0&amp;ECT=5&amp;RFTR=0&amp;PN=12&amp;DS=255">http://rovi-bound-usa-ssc-1.internal.veveo.net:8050/search?RPR=10&amp;ver=3.0&amp;VQ=1&amp;app=TVTAP&amp;langfilt=ENG&amp;dbg=1&amp;ProfileMix=NETFLIX%3A0.33%2CFACEBOOK%3A0.33%2CTVTAP%3A0.33&amp;XPID=pkg00%40341765463.ROVI&amp;_vq_ssid=c2Vzc2lvbjpjNzQzYWEyZS0xMDQzOTY&amp;XUA=tvspch&amp;importnf=0&amp;ECT=5&amp;RFTR=0&amp;PN=12&amp;DS=255</a> </td> </tr>
+        
+        
+        
+     </table>
+      <h4> Phrase Server Debug Information </h4>
+      <table class="table table-condensed">
+          
+        
+        
+         <tr> <td> <b>temporal_extraction</b> </td> <td> <a target="_blank" href="http://10.8.19.141:8000/temporal_extraction?lang=&amp;tz2=America%2FNew_York&amp;uuid=c743aa2e&amp;w=hi+how+are+you">http://10.8.19.141:8000/temporal_extraction?lang=&amp;tz2=America%2FNew_York&amp;uuid=c743aa2e&amp;w=hi+how+are+you</a> </td> </tr>
+        
+        
+        
+         <tr> <td> <b>pos_tagger_url</b> </td> <td> <a target="_blank" href="http://10.8.19.141:8000/pos_tagger?w=hi+how+are+you">http://10.8.19.141:8000/pos_tagger?w=hi+how+are+you</a> </td> </tr>
+        
+        
+        
+         <tr> <td> <b>phrase_server</b> </td> <td> <a target="_blank" href="http://10.8.19.141:8000//phrase_server?is_debug=1&amp;tz2=America%2FNew_York&amp;uuid=c743aa2e&amp;custid=&amp;app=TVTAP&amp;ks=0&amp;profiling=1&amp;W=hi+how+are+you&amp;text_blurb=hi+how+are+you&amp;XPID=pkg00%40341765463.ROVI&amp;orig_out_format=json&amp;Rty=5">http://10.8.19.141:8000//phrase_server?is_debug=1&amp;tz2=America%2FNew_York&amp;uuid=c743aa2e&amp;custid=&amp;app=TVTAP&amp;ks=0&amp;profiling=1&amp;W=hi+how+are+you&amp;text_blurb=hi+how+are+you&amp;XPID=pkg00%40341765463.ROVI&amp;orig_out_format=json&amp;Rty=5</a> </td> </tr>
+        
+        
+        
+         <tr> <td> <b>graph_server</b> </td> <td> <a target="_blank" href="http://rovi-conv-er-2.internal.veveo.net:8100/graph/graph_server.py?req=check_connections&amp;uuid=c743aa2e&amp;guids=">http://rovi-conv-er-2.internal.veveo.net:8100/graph/graph_server.py?req=check_connections&amp;uuid=c743aa2e&amp;guids=</a> </td> </tr>
+        
+        
+        
+         <tr> <td> <b><a href="http://rovi-conv-er-1.internal.veveo.net:8889/?role_ctxt_gids=&amp;is_prune=True&amp;plg_server_ip=rovi-conv-er-2.internal.veveo.net&amp;ctxt_gids=&amp;ctxt_phrases=set%28%5B%5D%29&amp;voice=0&amp;plg_server_port=8100&amp;blurb=hi+how+are+you&amp;uuid=c743aa2e" target="_blank">ER</a></b> </td> <td> <a target="_blank" href="http://rovi-conv-er-1.internal.veveo.net:8765/cgi-bin/entity_client.cgi?backend_url=http%3A%2F%2Frovi-conv-er-1.internal.veveo.net%3A8889%2F%3Frole_ctxt_gids%3D%26is_prune%3DTrue%26plg_server_ip%3Drovi-conv-er-2.internal.veveo.net%26ctxt_gids%3D%26ctxt_phrases%3Dset%2528%255B%255D%2529%26voice%3D0%26plg_server_port%3D8100%26blurb%3Dhi%2Bhow%2Bare%2Byou%26uuid%3Dc743aa2e">http://rovi-conv-er-1.internal.veveo.net:8889/?role_ctxt_gids=&amp;is_prune=True&amp;plg_server_ip=rovi-conv-er-2.internal.veveo.net&amp;ctxt_gids=&amp;ctxt_phrases=set%28%5B%5D%29&amp;voice=0&amp;plg_server_port=8100&amp;blurb=hi+how+are+you&amp;uuid=c743aa2e</a> </td> </tr>
+        
+        
+        
+         <tr> <td> <b>phrase_level_graph</b> </td> <td> <a target="_blank" href="http://rovi-conv-er-2.internal.veveo.net:8100/?phrases=set%28%5B%28%27you%27%2C+11%2C+3%2C+4%29%2C+%28%27how%27%2C+3%2C+3%2C+2%29%2C+%28%27are+you%27%2C+7%2C+7%2C+1%29%2C+%28%27hi%27%2C+0%2C+2%2C+3%29%5D%29&amp;req=check_overlap_phrase_connections">http://rovi-conv-er-2.internal.veveo.net:8100/?phrases=set%28%5B%28%27you%27%2C+11%2C+3%2C+4%29%2C+%28%27how%27%2C+3%2C+3%2C+2%29%2C+%28%27are+you%27%2C+7%2C+7%2C+1%29%2C+%28%27hi%27%2C+0%2C+2%2C+3%29%5D%29&amp;req=check_overlap_phrase_connections</a> </td> </tr>
+        
+        
+        
+         <tr> <td> <b>word2vec</b> </td> <td> <a target="_blank" href="http://10.8.19.141:5000/phrase_matcher?lang=eng%2Cctt&amp;phrases=showing%2Cgoing">http://10.8.19.141:5000/phrase_matcher?lang=eng%2Cctt&amp;phrases=showing%2Cgoing</a> </td> </tr>
+        
+        
+        
+     </table>
+
+    </div>
+
+      <footer>
+        <p>Confidential - Property of Rovi Corporation</p>
+        <p>&copy; Rovi Corporation 2014</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.1/select2.min.js"></script>
+    <script type="text/javascript">
+        var custid = "";
+window.onload=set_custid;
+function set_custid()
+{
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/kramer_tools/static/select2-3.4.0/component.json', false);
+    xhr.send(null);
+    //window.custid =   xhr.getResponseHeader("X-Access-User")+"_kdbt";
+}
+function submit_form(setup)
+{
+    setup_elem = document.getElementById('setup');
+    if ( setup_elem ) setup_elem.value = setup;
+    custid_elem = document.getElementById('custid');
+    if ( custid_elem ) custid_elem.value = window.custid;
+    document.forms.my_form.submit();
+} 
+
+function submit_spoken_form(setup)
+{
+    document.getElementById('vsc').checked = "checked";
+    return submit_form(setup);
+}
+
+function manage_setup(cmd, setup_pos)
+{
+    setup_list_elem = document.getElementById('setup_list');
+    cur_setups = setup_list_elem.value;
+    cur_setups = cur_setups.split(",");
+    setup = setup_pos.split('_')[0]
+    idx = cur_setups.indexOf(setup);
+    if(cmd == "add")
+    {
+        if(idx > -1)
+            return false;
+        cur_setups.push(setup);
+    }
+    else if(cmd == "remove")
+    {
+        if(idx < 0)
+            return false;
+        cur_setups.splice(idx, 1);
+    }
+    else if(cmd == "replace")
+    {
+        pos = setup_pos.split('_')[1]
+        cur_setups.splice(pos,1, setup)
+    }
+    setup_list_elem.value = cur_setups.join(",");
+    document.forms.my_form.submit();
+}
+
+
+
+    function report_issue(sword, setup)
+    {
+      $('#myModal').show();
+      $('#modal_data').show().html("<h1>Loading Report Information....</h1>");
+
+$.ajax({
+          type : 'GET',
+           url : '/kdebug/report', // in here you should put your query 
+          data : 'setup='+setup+'&W='+sword, 
+       success : function(r)
+           {
+              // now you can show output in your modal 
+              $('#modal_data').show().html(r);
+           },
+       error: function(jqXHR, textStatus, errorThrown)
+       {
+
+           $('#modal_data').show().html("<h2>Catch Nizam! Some exception happened while retrieving Feedback. Ph: +91 7760641867</h2>");
+
+       }
+    });
+
+    }
+
+var rendered_count = {'cnt': 0};
+var fired_count = 0;
+function typeahead_fn() {
+           var map = {};
+     $this = $(this);
+    $this.typeahead({
+         source: function (query, process) {
+                 fired_count += 1;
+                 return $.ajax({
+                         url: "/kgraphsearch/",
+                         data: {w: query, RPR: 10, is_debug: 1}, 
+                         context: {fired_count: fired_count,
+                         rendered_count: rendered_count, me: this},
+                         }).done(function (data) {
+                                 if (this['fired_count'] >  this['rendered_count']['cnt'])
+                                 {
+                                 this['rendered_count']['cnt'] += 1
+                                 $('#surl').html(data.search_query);
+                                 $('#surl').attr("href", data.search_query);
+                                 return process(data.suggestions);
+                                 }
+                             });
+            },
+        
+     matcher: function (param) {return true},
+     sorter: function (items) {
+         return items;
+             // implementation
+         },
+    property: 'name',
+    items: 5,
+    updater: function(item) {
+       return item;
+    },
+    onselect: function(item) { 
+     console.log(item);
+     return item;
+    }
+  });
+ }
+
+   $(".typeahead").each(typeahead_fn);
+
+
+
+    </script>
+
+  </body>
+</html>
