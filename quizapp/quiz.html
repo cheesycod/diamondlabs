@@ -1,9 +1,11 @@
 <html>
+
 <head>
 <meta charset="utf-8"></meta>
 </head>
 <body>
 <div id="formDiv">
+<<<<<<< HEAD
 <style>
 #QuestionBox {
 background-color:white;
@@ -18,6 +20,21 @@ background-color:green;
 <input type="text" name"Question" id='QuestionBox' value='' />
 <input type="text" name="Answer" id='answerBox' value=""/>
 <button onclick="a()"><b>Click me</b></button>
+=======
+
+<input type="text" name"Question" id='QuestionBox' value='' /><br>
+<input type="text" name="Answer" id='answerBox' value=""/><br>
+<button id="Button" onclick="a()">Click me</button>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="quiz.css" />
+
+>>>>>>> 6edb26ca77db86da17d94c2494c475569fad059e
 </div>
 <p>Your score is: <span id='score' ></span></p>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js"></script>
@@ -50,6 +67,7 @@ var userAnswer = $('#answerBox').val();
 if (userAnswer == answers[wq]){
 totalScore = totalScore + 1;
 };
+
 wq = wq + 1; 
 $('#QuestionBox').val(questions[wq]);
 $('#answerBox').val('');

@@ -1,0 +1,16 @@
+#QuestionBox {
+border:none;
+text-align: center;
+position: relative;
+
+};
+#answerBox{
+text-align: center;
+position: relative;
+background-color: red;
+}
+#Button {
+background-color: rgb(204, 255, 153);
+text-align:center;
+position: relative;
+};
