@@ -4,29 +4,41 @@
 </head>
 <body>
 <div id="formDiv">
-
-<input type="text" name"Question" id='QuestionBox' value='' /><br>
-<input type="text" name="Answer" id='answerBox' value=""/><br>
-<button onclick="a()">Click me</button>
-<input type="submit" name="Cancel" value="Cancel" />
-<input type="submit" name="End Quiz" value="End Quiz" /><br>
-
-
+<style>
+#QuestionBox {
+background-color:white;
+border:none;
+height:3px;
+width:100px;
+};
+#AnswerBox {
+background-color:green;
+};
+</style>
+<input type="text" name"Question" id='QuestionBox' value='' />
+<input type="text" name="Answer" id='answerBox' value=""/>
+<button onclick="a()"><b>Click me</b></button>
 </div>
 <p>Your score is: <span id='score' ></span></p>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js"></script>
 <script>
+
 var questions = [
+   "",
    "What is 9 + 10",
-   "August * Via",
+   "I love the number ____.",
    "1 + 1",
-   "What is sanandan's email address"
+   "What is sanandan's email address",
+   "True or False. Ubuntu 16.04 is the best. Write T for true and F for false."
+   
 ];
 var answers = [
+"abcdefg"  ,
 21,
 19,
-21,
-'sandhoners123@gmail.com'
+2,
+'sandhoners123@gmail.com',
+"T"
 ];
 
 var wq = 0;
@@ -43,7 +55,7 @@ $('#QuestionBox').val(questions[wq]);
 $('#answerBox').val('');
 $('#score').html(totalScore);
 };
-
+a();
 
 </script>
 </body>
