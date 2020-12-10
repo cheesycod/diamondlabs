@@ -6,7 +6,11 @@ git clone https://github.com/cheesycod/diamondlabs
 
 cd ftp
 
-``xdg-open index.html # Linux``\n
+``xdg-open index.html # Linux``
+
+
+
+
 ``open index.html # macOS`` 
 
 
