@@ -2,9 +2,12 @@
 
 # How to use
 
-# git clone https://github.com/cheesycod/diamondlabs
+git clone https://github.com/cheesycod/diamondlabs
 
-# cd ftp
+cd ftp
 
-# ``xdg-open index.html # Linux``
-# ``open index.html # macOS`` 
+``xdg-open index.html # Linux``
+``open index.html # macOS`` 
+
+
+This site was made in 2016 and may or may not be updated
